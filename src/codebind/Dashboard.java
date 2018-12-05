@@ -3,31 +3,69 @@ import eu.hansolo.steelseries.gauges.Radial;
 import eu.hansolo.steelseries.tools.*;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class Dashboard extends JFrame{
 
     private static Linear oilTempScavenge = null;
-    public static float Scav_OilPressure = 0;
 
-    public static float Tank_OilTemperature = 0;
-    public static float Tank_OilPressure = 0;
+    private static float Ambient_TemperatureMaxVal = 300;
+    private static float Ambient_pressureMaxVal = 300;
+    private static float T1_TemperatureMaxVal = 300;
+    private static float T1_PressureMaxVal = 300;
+    private static float T45_TemperatureMaxVal = 300;
+    private static float T45_PressureMaxVal = 300;
+    private static float T75_TemperatureMaxVal = 300;
+    private static float T75_PressureMaxVal = 300;
+    private static float T17_TemperatureMaxVal = 300;
+    private static float T17_PressureMaxVal = 300;
+    private static float oilPressureMaxVal = 100;
+    private static float FuelFlowMaxVal = 1000;
 
-    public static float FuelFlow = 0;
-
-    private static int N1_EngineRPM = 0;
-    private static int N2_EngineRPM = 0;
+    private static int N1_EngineRPMVal = 0;
+    private static int N2_EngineRPMVal = 0;
     private static int oilPressureVal = 0;
-    private static float Scav_OilTemperature = 0;
-    private static float Outlet_OilTemperature = 0;
+    private static float Scav_OilTemperatureVal = 0;
+    private static float Outlet_OilTemperatureVal = 0;
+
+    private static float Ambient_TemperatureVal = 0;
+    private static float Ambient_pressureVal = 0;
+    private static float T1_TemperatureVal = 0;
+    private static float T1_PressureVal = 0;
+    private static float T45_TemperatureVal = 0;
+    private static float T45_PressureVal = 0;
+    private static float T75_TemperatureVal = 0;
+    private static float T75_PressureVal = 0;
+    private static float T17_TemperatureVal = 0;
+    private static float T17_PressureVal = 0;
+
+    private static int FuelFlowVal = 0;
     private static Radial N1_EngineRPM_gauge = null;
     private static Radial N2_EngineRPM_gauge = null;
-    private static Radial oilPressure = null;
+    private static Radial oilPressure_gauge = null;
+    private static Radial FuelFlow_Radial = null;
     private static Linear oilTempOutlet = null;
 
+    private static Linear AmbientTemperature_linear = null;
+    private static Linear AmbientPressure_linear = null;
+    private static Linear T1_Temperature_linear = null;
+    private static Linear T1_Pressure_linear = null;
+    private static Linear T45_Temperature_linear = null;
+    private static Linear T45_Pressure_linear = null;
+    private static Linear T75_Temperature_linear = null;
+    private static Linear T75_Pressure_linear = null;
+    private static Linear T17_Temperature_linear = null;
+    private static Linear T17_Pressure_linear = null;
+
+
     private static JLabel valueLabel = null;
+    private static String outputPath = null;
+
+    static JButton button3;
 
 
 
@@ -37,11 +75,15 @@ public class Dashboard extends JFrame{
         panel.setLayout(new GridLayout(2,3));
         panel.setBackground(Color.black);
 
-        JPanel subPanel = new JPanel();
-        subPanel.setLayout(new GridLayout(2,1,0,40));
-        subPanel.setBackground(Color.black);
-        subPanel.setBorder(BorderFactory.createEmptyBorder(40,20,40,20));
+        JPanel subPanel1 = new JPanel();
+        subPanel1.setLayout(new GridLayout(5,1,0,2));
+        subPanel1.setBackground(Color.black);
+        subPanel1.setBorder(BorderFactory.createEmptyBorder(2,20,2,20));
 
+        JPanel subPanel2 = new JPanel();
+        subPanel2.setLayout(new GridLayout(5,1,0,2));
+        subPanel2.setBackground(Color.black);
+        subPanel2.setBorder(BorderFactory.createEmptyBorder(2,20,2,20));
 
         oilTempScavenge = new Linear();
         oilTempScavenge.setTitle("Oil Temp Scavenge");
@@ -58,6 +100,8 @@ public class Dashboard extends JFrame{
 
         oilTempScavenge.setSections(sectionOilTempScavenge);
         oilTempScavenge.setSectionsVisible(true);
+        oilTempScavenge.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        oilTempScavenge.setFrameVisible(false);
 
         oilTempOutlet = new Linear();
 
@@ -76,6 +120,112 @@ public class Dashboard extends JFrame{
 
         oilTempOutlet.setSections(sectionOilTempOutlet);
         oilTempOutlet.setSectionsVisible(true);
+        oilTempOutlet.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        oilTempOutlet.setFrameVisible(false);
+
+        //Copy and paste
+        AmbientTemperature_linear = new Linear();
+        AmbientTemperature_linear.setUnitString("\u00b0F");
+        AmbientTemperature_linear.setTitle("Ambient Temperature");
+        AmbientTemperature_linear.setMaxValue(Ambient_TemperatureMaxVal);
+        AmbientTemperature_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        AmbientTemperature_linear.setFrameVisible(false);
+        AmbientTemperature_linear.setValueColor(ColorDef.GREEN);
+        AmbientTemperature_linear.setLedVisible(false);
+
+        //Ambient Pressure
+        AmbientPressure_linear = new Linear();
+        AmbientPressure_linear.setUnitString("PSI");
+        AmbientPressure_linear.setTitle("Ambient Pressure");
+        AmbientPressure_linear.setMaxValue(Ambient_pressureMaxVal);
+        AmbientPressure_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        AmbientPressure_linear.setFrameVisible(false);
+        AmbientPressure_linear.setValueColor(ColorDef.GREEN);
+        AmbientPressure_linear.setLedVisible(false);
+
+        //T1_Temperature_linear
+        T1_Temperature_linear = new Linear();
+        T1_Temperature_linear.setUnitString("\u00b0F");
+        T1_Temperature_linear.setTitle("T1 Temperature");
+        T1_Temperature_linear.setMaxValue(T1_PressureMaxVal);
+        T1_Temperature_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        T1_Temperature_linear.setFrameVisible(false);
+        T1_Temperature_linear.setValueColor(ColorDef.GREEN);
+        T1_Temperature_linear.setLedVisible(false);
+
+        //T1_Pressure_linear
+        T1_Pressure_linear = new Linear();
+        T1_Pressure_linear.setUnitString("PSI");
+        T1_Pressure_linear.setTitle("T1 Pressure");
+        T1_Pressure_linear.setMaxValue(T1_PressureMaxVal);
+        T1_Pressure_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        T1_Pressure_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        T1_Pressure_linear.setFrameVisible(false);
+        T1_Pressure_linear.setValueColor(ColorDef.GREEN);
+        T1_Pressure_linear.setLedVisible(false);
+
+        //T45_Temperature_linear
+        T45_Temperature_linear = new Linear();
+        T45_Temperature_linear.setUnitString("\u00b0F");
+        T45_Temperature_linear.setTitle("T4.5 Temperature");
+        T45_Temperature_linear.setMaxValue(T45_TemperatureMaxVal);
+        T45_Temperature_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        T45_Temperature_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        T45_Temperature_linear.setFrameVisible(false);
+        T45_Temperature_linear.setValueColor(ColorDef.GREEN);
+        T45_Temperature_linear.setLedVisible(false);
+
+        //T45_Pressure_linear
+        T45_Pressure_linear = new Linear();
+        T45_Pressure_linear.setUnitString("PSI");
+        T45_Pressure_linear.setTitle("T4.5 Pressure");
+        T45_Pressure_linear.setMaxValue(T45_PressureMaxVal);
+        T45_Pressure_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        T45_Pressure_linear.setFrameVisible(false);
+        T45_Pressure_linear.setValueColor(ColorDef.GREEN);
+        T45_Pressure_linear.setLedVisible(false);
+
+        //T75_Temperature_linear
+        T75_Temperature_linear = new Linear();
+        T75_Temperature_linear.setUnitString("\u00b0F");
+        T75_Temperature_linear.setTitle("T7.5 Temperature");
+        T75_Temperature_linear.setMaxValue(T75_TemperatureMaxVal);
+        T75_Temperature_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        T75_Temperature_linear.setFrameVisible(false);
+        T75_Temperature_linear.setValueColor(ColorDef.GREEN);
+        T75_Temperature_linear.setLedVisible(false);
+
+        //T75_Pressure_linear
+        T75_Pressure_linear = new Linear();
+        T75_Pressure_linear.setUnitString("PSI");
+        T75_Pressure_linear.setTitle("T7.5 Pressure");
+        T75_Pressure_linear.setMaxValue(T75_PressureMaxVal);
+        T75_Pressure_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        T75_Pressure_linear.setFrameVisible(false);
+        T75_Pressure_linear.setValueColor(ColorDef.GREEN);
+        T75_Pressure_linear.setLedVisible(false);
+
+        //T17_Temperature_linear
+        T17_Temperature_linear = new Linear();
+        T17_Temperature_linear.setUnitString("\u00b0F");
+        T17_Temperature_linear.setTitle("T17 Temperature");
+        T17_Temperature_linear.setMaxValue(T17_TemperatureMaxVal);
+        T17_Temperature_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        T17_Temperature_linear.setFrameVisible(false);
+        T17_Temperature_linear.setValueColor(ColorDef.GREEN);
+        T17_Temperature_linear.setLedVisible(false);
+
+        //T17_Pressure_linear
+        T17_Pressure_linear = new Linear();
+        T17_Pressure_linear.setUnitString("PSI");
+        T17_Pressure_linear.setTitle("T17 Pressure");
+        T17_Pressure_linear.setMaxValue(T17_PressureMaxVal);
+        T17_Pressure_linear.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
+        T17_Pressure_linear.setFrameVisible(false);
+        T17_Pressure_linear.setValueColor(ColorDef.GREEN);
+        T17_Pressure_linear.setLedVisible(false);
+
+
 
         N1_EngineRPM_gauge = new Radial();
         N1_EngineRPM_gauge.setTitle("N1");
@@ -130,21 +280,23 @@ public class Dashboard extends JFrame{
         N2_EngineRPM_gauge.setSections(sectionsN1_EngineRPM_gauge);
         N2_EngineRPM_gauge.setSectionsVisible(true);
 
-        oilPressure = new Radial();
-        oilPressure.setTitle("Oil Pressure");
-        oilPressure.setUnitString("PSI");
+
+
+        oilPressure_gauge = new Radial();
+        oilPressure_gauge.setTitle("Oil Pressure");
+        oilPressure_gauge.setUnitString("PSI");
 
         //Set max value and background color
-        oilPressure.setBackgroundColor(BackgroundColor.BLACK);
-        oilPressure.setMaxValue(100);
-        oilPressure.setMinValue(0);
+        oilPressure_gauge.setBackgroundColor(BackgroundColor.BLACK);
+        oilPressure_gauge.setMaxValue(100);
+        oilPressure_gauge.setMinValue(0);
 
         //Set frame visibility, design and color
-        oilPressure.setFrameDesign(FrameDesign.BLACK_METAL);
-        oilPressure.setFrameVisible(true);
+        oilPressure_gauge.setFrameDesign(FrameDesign.BLACK_METAL);
+        oilPressure_gauge.setFrameVisible(true);
 
         //Set LED threshold
-        oilPressure.setThreshold(455);
+        oilPressure_gauge.setThreshold(455);
 
         //Set track & sections
         final Section[] sectionsoilPressure = {
@@ -154,13 +306,44 @@ public class Dashboard extends JFrame{
                 new Section(50, 55, java.awt.Color.YELLOW),
                 new Section(55, 100, java.awt.Color.RED) };
 
-        oilPressure.setSections(sectionsoilPressure);
-        oilPressure.setSectionsVisible(true);
-        subPanel.add(oilTempScavenge);
-        subPanel.add(oilTempOutlet);
-        panel.add(subPanel);
+        oilPressure_gauge.setSections(sectionsoilPressure);
+        oilPressure_gauge.setSectionsVisible(true);
+
+
+
+        FuelFlow_Radial = new Radial();
+        FuelFlow_Radial.setTitle("Fuel Flow");
+        FuelFlow_Radial.setUnitString("gal/hr");
+        FuelFlow_Radial.setThreshold(4000);
+
+        //Set max value and background color
+        FuelFlow_Radial.setBackgroundColor(BackgroundColor.BLACK);
+        FuelFlow_Radial.setMaxValue(1000);
+        FuelFlow_Radial.setMinValue(0);
+        FuelFlow_Radial.setLedVisible(false);
+
+        //Set frame visibility, design and color
+        FuelFlow_Radial.setFrameDesign(FrameDesign.BLACK_METAL);
+        FuelFlow_Radial.setFrameVisible(true);
+
+
+        subPanel1.add(oilTempOutlet);
+        subPanel1.add(oilTempScavenge);
+        subPanel1.add(AmbientTemperature_linear);
+        subPanel1.add(AmbientPressure_linear);
+        subPanel1.add(T1_Temperature_linear);
+
+        subPanel2.add(T1_Pressure_linear);
+        subPanel2.add(T45_Temperature_linear);
+        subPanel2.add(T45_Pressure_linear);
+        subPanel2.add(T17_Temperature_linear);
+        subPanel2.add(T17_Pressure_linear);
+
+        panel.add(subPanel1);
+        panel.add(oilPressure_gauge);
         panel.add(N1_EngineRPM_gauge);
-        panel.add(oilPressure);
+        panel.add(subPanel2);
+        panel.add(FuelFlow_Radial);
         panel.add(N2_EngineRPM_gauge);
 
 
@@ -204,6 +387,47 @@ public class Dashboard extends JFrame{
 
                         oilTempOutlet.setSections(sectionOilTempOutlet);
 
+                        AmbientTemperature_linear.setMaxValue(Ambient_TemperatureMaxVal);
+                        T1_Temperature_linear.setMaxValue(T1_TemperatureMaxVal);
+                        T45_Temperature_linear.setMaxValue(T45_TemperatureMaxVal);
+                        T75_Temperature_linear.setMaxValue(T75_TemperatureMaxVal);
+                        T17_Temperature_linear.setMaxValue(T17_TemperatureMaxVal);
+
+                        AmbientTemperature_linear.setUnitString("\u00b0F");
+                        T1_Temperature_linear.setUnitString("\u00b0F");
+                        T45_Temperature_linear.setUnitString("\u00b0F");
+                        T75_Temperature_linear.setUnitString("\u00b0F");
+                        T17_Temperature_linear.setUnitString("\u00b0F");
+
+                        T1_Pressure_linear.setMaxValue(T1_PressureMaxVal);
+                        T45_Pressure_linear.setMaxValue(T45_PressureMaxVal);
+                        T75_Pressure_linear.setMaxValue(T75_PressureMaxVal);
+                        T17_Pressure_linear.setMaxValue(T17_PressureMaxVal);
+
+                        AmbientPressure_linear.setMaxValue(Ambient_pressureMaxVal);
+
+                        System.out.println(toPSI((int) oilPressure_gauge.getValue()));
+                        oilPressure_gauge.setValue(toPSI((int) oilPressure_gauge.getValue()));
+                        oilPressure_gauge.setMaxValue(oilPressureMaxVal);
+                        //Set track & sections
+                        final Section[] sectionsoilPressure = {
+                                new Section(0, 30, Color.RED),
+                                new Section(30, 35, Color.YELLOW),
+                                new Section(35, 50, Color.GREEN),
+                                new Section(50, 55, java.awt.Color.YELLOW),
+                                new Section(55, 100, java.awt.Color.RED) };
+                        oilPressure_gauge.setSections(sectionsoilPressure);
+                        oilPressure_gauge.setUnitString("PSI");
+
+                        AmbientPressure_linear.setUnitString("PSI");
+                        T1_Pressure_linear.setUnitString("PSI");
+                        T45_Pressure_linear.setUnitString("PSI");
+                        T75_Pressure_linear.setUnitString("PSI");
+                        T17_Pressure_linear.setUnitString("PSI");
+
+                        FuelFlow_Radial.setMaxValue(FuelFlowMaxVal);
+                        FuelFlow_Radial.setUnitString("Gallon/Hour");
+
                     }else{
                         valueLabel.setText("Current Values: Metric");
                         button.setText("Switch to Imperial");
@@ -221,7 +445,6 @@ public class Dashboard extends JFrame{
                                 new Section(143, 150, java.awt.Color.RED) };
                         oilTempScavenge.setSections(sectionOilTempScavenge);
 
-
                         //Adjust oilTempOutlet
                         oilTempOutlet.setUnitString("\u00b0C");
                         oilTempOutlet.setMaxValue(150);
@@ -233,6 +456,46 @@ public class Dashboard extends JFrame{
                                 new Section(115, 123, java.awt.Color.YELLOW),
                                 new Section(123, 150, java.awt.Color.RED) };
                         oilTempOutlet.setSections(sectionOilTempOutlet);
+
+                        AmbientTemperature_linear.setMaxValue(toCelcius((int) Ambient_TemperatureMaxVal));
+                        T1_Temperature_linear.setMaxValue(toCelcius((int) T1_TemperatureMaxVal));
+                        T45_Temperature_linear.setMaxValue(toCelcius((int) T45_TemperatureMaxVal));
+                        T75_Temperature_linear.setMaxValue(toCelcius((int) T75_TemperatureMaxVal));
+                        T17_Temperature_linear.setMaxValue(toCelcius((int) T17_TemperatureMaxVal));
+
+                        AmbientTemperature_linear.setUnitString("\u00b0C");
+                        T1_Temperature_linear.setUnitString("\u00b0C");
+                        T45_Temperature_linear.setUnitString("\u00b0C");
+                        T75_Temperature_linear.setUnitString("\u00b0C");
+                        T17_Temperature_linear.setUnitString("\u00b0C");
+
+                        AmbientPressure_linear.setMaxValue(tokPa((int)Ambient_pressureMaxVal));
+                        T1_Pressure_linear.setMaxValue(tokPa((int) T1_PressureMaxVal));
+                        T45_Pressure_linear.setMaxValue(tokPa((int) T45_PressureMaxVal));
+                        T75_Pressure_linear.setMaxValue(tokPa((int) T75_PressureMaxVal));
+                        T17_Pressure_linear.setMaxValue(tokPa((int) T17_PressureMaxVal));
+
+                        System.out.println(tokPa((int) oilPressure_gauge.getValue()));
+                        oilPressure_gauge.setValue(tokPa((int) oilPressure_gauge.getValue()));
+                        oilPressure_gauge.setMaxValue(tokPa((int)oilPressureMaxVal));
+                        //Set track & sections
+                        final Section[] sectionsoilPressure = {
+                                new Section(0, 4, Color.RED),
+                                new Section(4, 5, Color.YELLOW),
+                                new Section(5, 7, Color.GREEN),
+                                new Section(7, 8, java.awt.Color.YELLOW),
+                                new Section(8, tokPa((int) oilPressureMaxVal), java.awt.Color.RED) };
+                        oilPressure_gauge.setSections(sectionsoilPressure);
+                        oilPressure_gauge.setUnitString("kPa");
+
+                        AmbientPressure_linear.setUnitString("kPa");
+                        T1_Pressure_linear.setUnitString("kPa");
+                        T45_Pressure_linear.setUnitString("kPa");
+                        T75_Pressure_linear.setUnitString("kPa");
+                        T17_Pressure_linear.setUnitString("kPa");
+
+                        FuelFlow_Radial.setMaxValue(toLPH((int) FuelFlowMaxVal));
+                        FuelFlow_Radial.setUnitString("Litres/Hour");
                     }
                 } catch(NumberFormatException ex) {
                     //TODO - handle invalid input
@@ -241,18 +504,50 @@ public class Dashboard extends JFrame{
             }
         });
 
-        DemoJFileChooser panel = new DemoJFileChooser();
-        frame.addWindowListener(
-                new WindowAdapter() {
-                    public void windowClosing(WindowEvent e) {
-                        System.exit(0);
-                    }
+
+        JButton button2 = new JButton("Choose Log Output Destination");
+        button2.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+                jfc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
+                int returnValue = jfc.showOpenDialog(null);
+                // int returnValue = jfc.showSaveDialog(null);
+
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = jfc.getSelectedFile();
+                    outputPath = selectedFile.toString();
+                    System.out.println(selectedFile.getAbsolutePath());
                 }
-        );
+
+                if(outputPath != null){
+                    button3.setEnabled(true);
+                }
+            }
+        });
+
+        button3 = new JButton("Begin Log");
+        button3.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(button3.getText().equals("Begin Log")){
+                    button3.setText("Stop Log");
+                    Logger LoggerThread = new Logger(false);
+                    Thread t2 = new Thread(LoggerThread);
+                    t2.start();
+                }else{
+                    button3.setText("Begin Log");
+                    Logger.stop();
+                }
+            }
+        });
+
 
         buttonsPanel.add(valueLabel);
         buttonsPanel.add(button);
-        buttonsPanel.add(panel);
+        buttonsPanel.add(button2);
+        buttonsPanel.add(button3);
+        button3.setEnabled(false);
 
         frame.add(buttonsPanel, BorderLayout.NORTH);
 
@@ -263,60 +558,230 @@ public class Dashboard extends JFrame{
         UpdateDataThread UDThread = new UpdateDataThread(10);
         Thread t = new Thread(UDThread);
         t.start();
-
-
     }
 
-    public static int getN2_EngineRPM() {
-        return N2_EngineRPM;
+    public static int getN1_EngineRPMVal() {
+        return N1_EngineRPMVal;
+    }
+
+    public static int getN2_EngineRPMVal() {
+        return N2_EngineRPMVal;
     }
 
     public static int getOilPressureVal() {
         return oilPressureVal;
     }
 
-    public static float getScav_OilTemperature() {
-        return Scav_OilTemperature;
+    public static float getScav_OilTemperatureVal() {
+        return Scav_OilTemperatureVal;
     }
 
-    public static float getOutlet_OilTemperature() {
-        return Outlet_OilTemperature;
+    public static float getOutlet_OilTemperatureVal() {
+        return Outlet_OilTemperatureVal;
+    }
+
+    public static float getAmbient_TemperatureVal() {
+        return Ambient_TemperatureVal;
+    }
+
+    public static float getAmbient_pressureVal() {
+        return Ambient_pressureVal;
+    }
+
+    public static float getT1_TemperatureVal() {
+        return T1_TemperatureVal;
+    }
+
+    public static float getT1_PressureVal() {
+        return T1_PressureVal;
+    }
+
+    public static float getT45_TemperatureVal() {
+        return T45_TemperatureVal;
+    }
+
+    public static float getT45_PressureVal() {
+        return T45_PressureVal;
+    }
+
+    public static float getT75_TemperatureVal() {
+        return T75_TemperatureVal;
+    }
+
+    public static float getT75_PressureVal() {
+        return T75_PressureVal;
+    }
+
+    public static float getT17_TemperatureVal() {
+        return T17_TemperatureVal;
+    }
+
+    public static float getT17_PressureVal() {
+        return T17_PressureVal;
     }
 
     public int getN1_EningeRPM() {
-        return N1_EningeRPM;
+        return N1_EngineRPMVal;
     }
 
-    public static void setN1_EngineRPM(int n1_EngineRPM) {
-        N1_EngineRPM = n1_EngineRPM;
-        N1_EngineRPM_gauge.setValue(n1_EningeRPM/100);
-        N1_EngineRPM_gauge.setLcdValue(n1_EningeRPM);
+    public static void setN1_EngineRPMVal(int n1_EngineRPMVal) {
+        N1_EngineRPMVal = n1_EngineRPMVal;
+        N1_EngineRPM_gauge.setValue(n1_EngineRPMVal);
+        N1_EngineRPM_gauge.setLcdValue(n1_EngineRPMVal*100);
     }
 
-    public static void setN2_EngineRPM(int n2_EningeRPM) {
-        N2_EningeRPM = n2_EningeRPM;
-        N2_EngineRPM_gauge.setValue(n2_EningeRPM/100);
-        N2_EngineRPM_gauge.setLcdValue(n2_EningeRPM);
+    public static void setN2_EngineRPMVal(int n2_EningeRPM) {
+        N2_EngineRPMVal = n2_EningeRPM;
+        N2_EngineRPM_gauge.setValue(n2_EningeRPM);
+        N2_EngineRPM_gauge.setLcdValue(n2_EningeRPM*100);
     }
 
     public static void setOilTempScavenge(int oilTempScavengeValue) {
-        Scav_OilTemperature = oilTempScavengeValue;
-        oilTempScavenge.setValue(oilTempScavengeValue);
+        if(getValueType().equals("Current Values: Metric")){
+            oilTempScavenge.setValue(toCelcius(oilTempScavengeValue));
+        }else{
+            oilTempScavenge.setValue(oilTempScavengeValue);
+        }
+        Scav_OilTemperatureVal = oilTempScavengeValue;
+
     }
 
     public static void setOilTempOutlet(int oilTempOutletValue) {
-        Outlet_OilTemperature = oilTempOutletValue;
-        oilTempOutlet.setValue(oilTempOutletValue);
+        if(getValueType().equals("Current Values: Metric")){
+            oilTempOutlet.setValue(toCelcius(oilTempOutletValue));
+        }else{
+            oilTempOutlet.setValue(oilTempOutletValue);
+        }
+        Outlet_OilTemperatureVal = oilTempOutletValue;
     }
 
     public static void setOilPressure(int oilPressureValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            oilPressure_gauge.setValue(tokPa(oilPressureValue));
+        }else{
+            oilPressure_gauge.setValue(oilPressureValue);
+        }
         oilPressureVal = oilPressureValue;
-        oilPressure.setValue(oilPressureValue);
+    }
+
+    public static void setAmbientTemperature(int ambientTemperatureValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            AmbientTemperature_linear.setValue(toCelcius(ambientTemperatureValue));
+        }else{
+            AmbientTemperature_linear.setValue(ambientTemperatureValue);
+        }
+        Ambient_TemperatureVal = ambientTemperatureValue;
+    }
+
+    public static void setAmbientPressure(int ambientPressureValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            AmbientPressure_linear.setValue(tokPa(ambientPressureValue));
+        }else{
+            AmbientPressure_linear.setValue(ambientPressureValue);
+        }
+        Ambient_pressureVal = ambientPressureValue;
+    }
+
+    public static void setT1Temperature(int T1TemperatureValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            T1_Temperature_linear.setValue(toCelcius(T1TemperatureValue));
+        }else{
+            T1_Temperature_linear.setValue(T1TemperatureValue);
+        }
+        T1_TemperatureVal = T1TemperatureValue;
+    }
+
+    public static void setT1Pressure(int T1PressureValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            T1_Pressure_linear.setValue(tokPa(T1PressureValue));
+        }else{
+            T1_Pressure_linear.setValue(T1PressureValue);
+        }
+        T1_PressureVal = T1PressureValue;
+    }
+
+    public static void setT45Temperature(int T45TemperatureValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            T45_Temperature_linear.setValue(toCelcius(T45TemperatureValue));
+        }else{
+            T45_Temperature_linear.setValue(T45TemperatureValue);
+        }
+        T45_TemperatureVal = T45TemperatureValue;
+    }
+
+    public static void setT45Pressure(int T45PressureValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            T45_Pressure_linear.setValue(tokPa(T45PressureValue));
+        }else{
+            T45_Pressure_linear.setValue(T45PressureValue);
+        }
+        T45_PressureVal = T45PressureValue;
+    }
+
+    public static void setT75Temperature(int T75TemperatureValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            T75_Temperature_linear.setValue(toCelcius(T75TemperatureValue));
+        }else{
+            T75_Temperature_linear.setValue(T75TemperatureValue);
+        }
+        T75_TemperatureVal = T75TemperatureValue;
+    }
+
+    public static void setT75Pressure(int T75PressureValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            T75_Pressure_linear.setValue(tokPa(T75PressureValue));
+        }else{
+            T75_Pressure_linear.setValue(T75PressureValue);
+        }
+        T75_PressureVal = T75PressureValue;
+    }
+
+    public static void setT17Temperature(int T17TemperatureValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            T17_Temperature_linear.setValue(toCelcius(T17TemperatureValue));
+        }else{
+            T17_Temperature_linear.setValue(T17TemperatureValue);
+        }
+        T17_TemperatureVal = T17TemperatureValue;
+    }
+
+    public static void setT17Pressure(int T17PressureValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            T17_Pressure_linear.setValue(tokPa(T17PressureValue));
+        }else{
+            T17_Pressure_linear.setValue(T17PressureValue);
+        }
+        T17_PressureVal = T17PressureValue;
+    }
+
+    public static void setFuelFlow(int fuelFlowValue) {
+        if(getValueType().equals("Current Values: Metric")){
+            FuelFlow_Radial.setValue(toLPH(fuelFlowValue));
+        }else{
+            FuelFlow_Radial.setValue(fuelFlowValue);
+        }
+        FuelFlowVal = fuelFlowValue;
     }
 
     public static String getValueType(){
         return valueLabel.getText();
     }
+
+    public static String getOutputPath(){return outputPath;}
+
+    public static int toFahrenheit(int C){
+        return (int)(C*1.8+32);
+    }
+
+    public static int toCelcius(int F){
+        return (int)((F-32)/1.8);
+    }
+
+    public static int tokPa(int PSI){return (int)(0.145*PSI);}
+
+    public static int toPSI(int kPa){return (int)(6.895*kPa);}
+
+    public static int toLPH(int GPH){return (int)(GPH*3.785);}
 }
 
 
