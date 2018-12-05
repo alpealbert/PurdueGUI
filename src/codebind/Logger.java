@@ -8,11 +8,16 @@ import java.util.Calendar;
 public class Logger implements Runnable{
 
     //Change LoggerInterval to change log-interval. Time in ms between reads.
-    public static int LoggerInterval = 500;
+    public  int LoggerInterval = 500;
     public static PrintWriter printWriter = null;
-    public static FileWriter fileWriter = null;
+    public  FileWriter fileWriter = null;
     public static boolean exit = false;
+    IDashboard Dashboard;
 
+    public Logger(Boolean exitValue,IDashboard dashboard){
+        exit = exitValue;
+        Dashboard=dashboard;
+    }
     @Override
     public void run() {
         try {
@@ -79,27 +84,25 @@ public class Logger implements Runnable{
         }
     }
 
-    public static void stop(){
+    static void stop(){
         System.out.println("Exiting!");
         printWriter.close();
         exit=true;
     }
 
-    public Logger(Boolean exitValue){
-        exit = exitValue;
-    }
 
-    public static int toFahrenheit(int C){
+
+    public  int toFahrenheit(int C){
         return (int)(C*1.8+32);
     }
 
-    public static int toCelcius(int F){
+    public  int toCelcius(int F){
         return (int)((F-32)/1.8);
     }
 
-    public static int tokPa(int PSI){return (int)(0.145*PSI);}
+    public  int tokPa(int PSI){return (int)(0.145*PSI);}
 
-    public static int toPSI(int kPa){return (int)(6.895*kPa);}
+    public  int toPSI(int kPa){return (int)(6.895*kPa);}
 
-    public static int toLPH(int GPH){return (int)(GPH*3.785);}
+    public  int toLPH(int GPH){return (int)(GPH*3.785);}
 }

@@ -9,67 +9,68 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class Dashboard extends JFrame{
+public class Dashboard extends JFrame implements IDashboard{
 
-    private static Linear oilTempScavenge = null;
+    private Linear oilTempScavenge = null;
 
-    private static float Ambient_TemperatureMaxVal = 300;
-    private static float Ambient_pressureMaxVal = 300;
-    private static float T1_TemperatureMaxVal = 300;
-    private static float T1_PressureMaxVal = 300;
-    private static float T45_TemperatureMaxVal = 300;
-    private static float T45_PressureMaxVal = 300;
-    private static float T75_TemperatureMaxVal = 300;
-    private static float T75_PressureMaxVal = 300;
-    private static float T17_TemperatureMaxVal = 300;
-    private static float T17_PressureMaxVal = 300;
-    private static float oilPressureMaxVal = 100;
-    private static float FuelFlowMaxVal = 1000;
+    private float Ambient_TemperatureMaxVal = 300;
+    private float Ambient_pressureMaxVal = 300;
+    private float T1_TemperatureMaxVal = 300;
+    private float T1_PressureMaxVal = 300;
+    private float T45_TemperatureMaxVal = 300;
+    private float T45_PressureMaxVal = 300;
+    private float T75_TemperatureMaxVal = 300;
+    private float T75_PressureMaxVal = 300;
+    private float T17_TemperatureMaxVal = 300;
+    private float T17_PressureMaxVal = 300;
+    private float oilPressureMaxVal = 100;
+    private float FuelFlowMaxVal = 1000;
 
-    private static int N1_EngineRPMVal = 0;
-    private static int N2_EngineRPMVal = 0;
-    private static int oilPressureVal = 0;
-    private static float Scav_OilTemperatureVal = 0;
-    private static float Outlet_OilTemperatureVal = 0;
+    private int N1_EngineRPMVal = 0;
+    private int N2_EngineRPMVal = 0;
+    private int oilPressureVal = 0;
+    private float Scav_OilTemperatureVal = 0;
+    private float Outlet_OilTemperatureVal = 0;
 
-    private static float Ambient_TemperatureVal = 0;
-    private static float Ambient_pressureVal = 0;
-    private static float T1_TemperatureVal = 0;
-    private static float T1_PressureVal = 0;
-    private static float T45_TemperatureVal = 0;
-    private static float T45_PressureVal = 0;
-    private static float T75_TemperatureVal = 0;
-    private static float T75_PressureVal = 0;
-    private static float T17_TemperatureVal = 0;
-    private static float T17_PressureVal = 0;
+    private float Ambient_TemperatureVal = 0;
+    private float Ambient_pressureVal = 0;
+    private float T1_TemperatureVal = 0;
+    private float T1_PressureVal = 0;
+    private float T45_TemperatureVal = 0;
+    private float T45_PressureVal = 0;
+    private float T75_TemperatureVal = 0;
+    private float T75_PressureVal = 0;
+    private  float T17_TemperatureVal = 0;
+    private  float T17_PressureVal = 0;
 
-    private static int FuelFlowVal = 0;
-    private static Radial N1_EngineRPM_gauge = null;
-    private static Radial N2_EngineRPM_gauge = null;
-    private static Radial oilPressure_gauge = null;
-    private static Radial FuelFlow_Radial = null;
-    private static Linear oilTempOutlet = null;
+    private  int FuelFlowVal = 0;
+    private  Radial N1_EngineRPM_gauge = null;
+    private  Radial N2_EngineRPM_gauge = null;
+    private  Radial oilPressure_gauge = null;
+    private  Radial FuelFlow_Radial = null;
+    private  Linear oilTempOutlet = null;
 
-    private static Linear AmbientTemperature_linear = null;
-    private static Linear AmbientPressure_linear = null;
-    private static Linear T1_Temperature_linear = null;
-    private static Linear T1_Pressure_linear = null;
-    private static Linear T45_Temperature_linear = null;
-    private static Linear T45_Pressure_linear = null;
-    private static Linear T75_Temperature_linear = null;
-    private static Linear T75_Pressure_linear = null;
-    private static Linear T17_Temperature_linear = null;
-    private static Linear T17_Pressure_linear = null;
-
-
-    private static JLabel valueLabel = null;
-    private static String outputPath = null;
-
-    static JButton button3;
+    private  Linear AmbientTemperature_linear = null;
+    private  Linear AmbientPressure_linear = null;
+    private  Linear T1_Temperature_linear = null;
+    private  Linear T1_Pressure_linear = null;
+    private  Linear T45_Temperature_linear = null;
+    private  Linear T45_Pressure_linear = null;
+    private  Linear T75_Temperature_linear = null;
+    private  Linear T75_Pressure_linear = null;
+    private  Linear T17_Temperature_linear = null;
+    private  Linear T17_Pressure_linear = null;
 
 
+    private  JLabel valueLabel = null;
+    private  String outputPath = null;
 
-    public static void main(String[] args) {
+     JButton button3;
+
+
+
+    public Dashboard(IDashboard Dashboard) {
+
         JFrame frame = new JFrame("JFrame Example");
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(2,3));
@@ -532,7 +533,7 @@ public class Dashboard extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 if(button3.getText().equals("Begin Log")){
                     button3.setText("Stop Log");
-                    Logger LoggerThread = new Logger(false);
+                    Logger LoggerThread = new Logger(false,Dashboard);
                     Thread t2 = new Thread(LoggerThread);
                     t2.start();
                 }else{
@@ -555,68 +556,65 @@ public class Dashboard extends JFrame{
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
 
-        UpdateDataThread UDThread = new UpdateDataThread(10);
-        Thread t = new Thread(UDThread);
-        t.start();
     }
 
-    public static int getN1_EngineRPMVal() {
+    public int getN1_EngineRPMVal() {
         return N1_EngineRPMVal;
     }
 
-    public static int getN2_EngineRPMVal() {
+    public int getN2_EngineRPMVal() {
         return N2_EngineRPMVal;
     }
 
-    public static int getOilPressureVal() {
+    public int getOilPressureVal() {
         return oilPressureVal;
     }
 
-    public static float getScav_OilTemperatureVal() {
+    public float getScav_OilTemperatureVal() {
         return Scav_OilTemperatureVal;
     }
 
-    public static float getOutlet_OilTemperatureVal() {
+    public float getOutlet_OilTemperatureVal() {
         return Outlet_OilTemperatureVal;
     }
 
-    public static float getAmbient_TemperatureVal() {
+    public float getAmbient_TemperatureVal() {
         return Ambient_TemperatureVal;
     }
 
-    public static float getAmbient_pressureVal() {
+    public float getAmbient_pressureVal() {
         return Ambient_pressureVal;
     }
 
-    public static float getT1_TemperatureVal() {
+    public float getT1_TemperatureVal() {
         return T1_TemperatureVal;
     }
 
-    public static float getT1_PressureVal() {
+    public float getT1_PressureVal() {
         return T1_PressureVal;
     }
 
-    public static float getT45_TemperatureVal() {
+    public float getT45_TemperatureVal() {
         return T45_TemperatureVal;
     }
 
-    public static float getT45_PressureVal() {
+    public float getT45_PressureVal() {
         return T45_PressureVal;
     }
 
-    public static float getT75_TemperatureVal() {
+    public float getT75_TemperatureVal() {
         return T75_TemperatureVal;
     }
 
-    public static float getT75_PressureVal() {
+    public float getT75_PressureVal() {
         return T75_PressureVal;
     }
 
-    public static float getT17_TemperatureVal() {
+    public float getT17_TemperatureVal() {
         return T17_TemperatureVal;
     }
 
-    public static float getT17_PressureVal() {
+    public float getT17_PressureVal() {
         return T17_PressureVal;
     }
 
@@ -624,19 +622,19 @@ public class Dashboard extends JFrame{
         return N1_EngineRPMVal;
     }
 
-    public static void setN1_EngineRPMVal(int n1_EngineRPMVal) {
+    public void setN1_EngineRPMVal(int n1_EngineRPMVal) {
         N1_EngineRPMVal = n1_EngineRPMVal;
         N1_EngineRPM_gauge.setValue(n1_EngineRPMVal);
         N1_EngineRPM_gauge.setLcdValue(n1_EngineRPMVal*100);
     }
 
-    public static void setN2_EngineRPMVal(int n2_EningeRPM) {
+    public void setN2_EngineRPMVal(int n2_EningeRPM) {
         N2_EngineRPMVal = n2_EningeRPM;
         N2_EngineRPM_gauge.setValue(n2_EningeRPM);
         N2_EngineRPM_gauge.setLcdValue(n2_EningeRPM*100);
     }
 
-    public static void setOilTempScavenge(int oilTempScavengeValue) {
+    public void setOilTempScavenge(int oilTempScavengeValue) {
         if(getValueType().equals("Current Values: Metric")){
             oilTempScavenge.setValue(toCelcius(oilTempScavengeValue));
         }else{
@@ -646,7 +644,7 @@ public class Dashboard extends JFrame{
 
     }
 
-    public static void setOilTempOutlet(int oilTempOutletValue) {
+    public void setOilTempOutlet(int oilTempOutletValue) {
         if(getValueType().equals("Current Values: Metric")){
             oilTempOutlet.setValue(toCelcius(oilTempOutletValue));
         }else{
@@ -655,7 +653,7 @@ public class Dashboard extends JFrame{
         Outlet_OilTemperatureVal = oilTempOutletValue;
     }
 
-    public static void setOilPressure(int oilPressureValue) {
+    public void setOilPressure(int oilPressureValue) {
         if(getValueType().equals("Current Values: Metric")){
             oilPressure_gauge.setValue(tokPa(oilPressureValue));
         }else{
@@ -664,7 +662,7 @@ public class Dashboard extends JFrame{
         oilPressureVal = oilPressureValue;
     }
 
-    public static void setAmbientTemperature(int ambientTemperatureValue) {
+    public void setAmbientTemperature(int ambientTemperatureValue) {
         if(getValueType().equals("Current Values: Metric")){
             AmbientTemperature_linear.setValue(toCelcius(ambientTemperatureValue));
         }else{
@@ -673,7 +671,7 @@ public class Dashboard extends JFrame{
         Ambient_TemperatureVal = ambientTemperatureValue;
     }
 
-    public static void setAmbientPressure(int ambientPressureValue) {
+    public void setAmbientPressure(int ambientPressureValue) {
         if(getValueType().equals("Current Values: Metric")){
             AmbientPressure_linear.setValue(tokPa(ambientPressureValue));
         }else{
@@ -682,7 +680,7 @@ public class Dashboard extends JFrame{
         Ambient_pressureVal = ambientPressureValue;
     }
 
-    public static void setT1Temperature(int T1TemperatureValue) {
+    public void setT1Temperature(int T1TemperatureValue) {
         if(getValueType().equals("Current Values: Metric")){
             T1_Temperature_linear.setValue(toCelcius(T1TemperatureValue));
         }else{
@@ -691,7 +689,7 @@ public class Dashboard extends JFrame{
         T1_TemperatureVal = T1TemperatureValue;
     }
 
-    public static void setT1Pressure(int T1PressureValue) {
+    public void setT1Pressure(int T1PressureValue) {
         if(getValueType().equals("Current Values: Metric")){
             T1_Pressure_linear.setValue(tokPa(T1PressureValue));
         }else{
@@ -700,7 +698,7 @@ public class Dashboard extends JFrame{
         T1_PressureVal = T1PressureValue;
     }
 
-    public static void setT45Temperature(int T45TemperatureValue) {
+    public void setT45Temperature(int T45TemperatureValue) {
         if(getValueType().equals("Current Values: Metric")){
             T45_Temperature_linear.setValue(toCelcius(T45TemperatureValue));
         }else{
@@ -709,7 +707,7 @@ public class Dashboard extends JFrame{
         T45_TemperatureVal = T45TemperatureValue;
     }
 
-    public static void setT45Pressure(int T45PressureValue) {
+    public void setT45Pressure(int T45PressureValue) {
         if(getValueType().equals("Current Values: Metric")){
             T45_Pressure_linear.setValue(tokPa(T45PressureValue));
         }else{
@@ -718,7 +716,7 @@ public class Dashboard extends JFrame{
         T45_PressureVal = T45PressureValue;
     }
 
-    public static void setT75Temperature(int T75TemperatureValue) {
+    public void setT75Temperature(int T75TemperatureValue) {
         if(getValueType().equals("Current Values: Metric")){
             T75_Temperature_linear.setValue(toCelcius(T75TemperatureValue));
         }else{
@@ -727,7 +725,7 @@ public class Dashboard extends JFrame{
         T75_TemperatureVal = T75TemperatureValue;
     }
 
-    public static void setT75Pressure(int T75PressureValue) {
+    public void setT75Pressure(int T75PressureValue) {
         if(getValueType().equals("Current Values: Metric")){
             T75_Pressure_linear.setValue(tokPa(T75PressureValue));
         }else{
@@ -736,7 +734,7 @@ public class Dashboard extends JFrame{
         T75_PressureVal = T75PressureValue;
     }
 
-    public static void setT17Temperature(int T17TemperatureValue) {
+    public void setT17Temperature(int T17TemperatureValue) {
         if(getValueType().equals("Current Values: Metric")){
             T17_Temperature_linear.setValue(toCelcius(T17TemperatureValue));
         }else{
@@ -745,7 +743,7 @@ public class Dashboard extends JFrame{
         T17_TemperatureVal = T17TemperatureValue;
     }
 
-    public static void setT17Pressure(int T17PressureValue) {
+    public void setT17Pressure(int T17PressureValue) {
         if(getValueType().equals("Current Values: Metric")){
             T17_Pressure_linear.setValue(tokPa(T17PressureValue));
         }else{
@@ -754,7 +752,7 @@ public class Dashboard extends JFrame{
         T17_PressureVal = T17PressureValue;
     }
 
-    public static void setFuelFlow(int fuelFlowValue) {
+    public void setFuelFlow(int fuelFlowValue) {
         if(getValueType().equals("Current Values: Metric")){
             FuelFlow_Radial.setValue(toLPH(fuelFlowValue));
         }else{
@@ -763,25 +761,25 @@ public class Dashboard extends JFrame{
         FuelFlowVal = fuelFlowValue;
     }
 
-    public static String getValueType(){
+    public String getValueType(){
         return valueLabel.getText();
     }
 
-    public static String getOutputPath(){return outputPath;}
+    public String getOutputPath(){return outputPath;}
 
-    public static int toFahrenheit(int C){
+    public int toFahrenheit(int C){
         return (int)(C*1.8+32);
     }
 
-    public static int toCelcius(int F){
+    public int toCelcius(int F){
         return (int)((F-32)/1.8);
     }
 
-    public static int tokPa(int PSI){return (int)(0.145*PSI);}
+    public int tokPa(int PSI){return (int)(0.145*PSI);}
 
-    public static int toPSI(int kPa){return (int)(6.895*kPa);}
+    public int toPSI(int kPa){return (int)(6.895*kPa);}
 
-    public static int toLPH(int GPH){return (int)(GPH*3.785);}
+    public int toLPH(int GPH){return (int)(GPH*3.785);}
 }
 
 
