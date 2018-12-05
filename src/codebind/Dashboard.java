@@ -1,7 +1,3 @@
-package com.codebind;
-
-import eu.hansolo.custom.SteelCheckBox;
-import eu.hansolo.custom.SteelCheckBoxUI;
 import eu.hansolo.steelseries.gauges.Linear;
 import eu.hansolo.steelseries.gauges.Radial;
 import eu.hansolo.steelseries.tools.*;
@@ -21,8 +17,8 @@ public class Dashboard extends JFrame{
 
     public static float FuelFlow = 0;
 
-    private static int N1_EningeRPM = 0;
-    private static int N2_EningeRPM = 0;
+    private static int N1_EngineRPM = 0;
+    private static int N2_EngineRPM = 0;
     private static int oilPressureVal = 0;
     private static float Scav_OilTemperature = 0;
     private static float Outlet_OilTemperature = 0;
@@ -245,9 +241,18 @@ public class Dashboard extends JFrame{
             }
         });
 
-        buttonsPanel.add(valueLabel);
-        buttonsPanel.add(button, BorderLayout.WEST);
+        DemoJFileChooser panel = new DemoJFileChooser();
+        frame.addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        System.exit(0);
+                    }
+                }
+        );
 
+        buttonsPanel.add(valueLabel);
+        buttonsPanel.add(button);
+        buttonsPanel.add(panel);
 
         frame.add(buttonsPanel, BorderLayout.NORTH);
 
@@ -262,18 +267,36 @@ public class Dashboard extends JFrame{
 
     }
 
+    public static int getN2_EngineRPM() {
+        return N2_EngineRPM;
+    }
+
+    public static int getOilPressureVal() {
+        return oilPressureVal;
+    }
+
+    public static float getScav_OilTemperature() {
+        return Scav_OilTemperature;
+    }
+
+    public static float getOutlet_OilTemperature() {
+        return Outlet_OilTemperature;
+    }
+
     public int getN1_EningeRPM() {
         return N1_EningeRPM;
     }
 
-    public static void setN1_EningeRPM(int n1_EningeRPM) {
-        N1_EningeRPM = n1_EningeRPM;
-        N1_EngineRPM_gauge.setValue(n1_EningeRPM);
+    public static void setN1_EngineRPM(int n1_EngineRPM) {
+        N1_EngineRPM = n1_EngineRPM;
+        N1_EngineRPM_gauge.setValue(n1_EningeRPM/100);
+        N1_EngineRPM_gauge.setLcdValue(n1_EningeRPM);
     }
 
-    public static void setN2_EningeRPM(int n2_EningeRPM) {
+    public static void setN2_EngineRPM(int n2_EningeRPM) {
         N2_EningeRPM = n2_EningeRPM;
-        N2_EngineRPM_gauge.setValue(n2_EningeRPM);
+        N2_EngineRPM_gauge.setValue(n2_EningeRPM/100);
+        N2_EngineRPM_gauge.setLcdValue(n2_EningeRPM);
     }
 
     public static void setOilTempScavenge(int oilTempScavengeValue) {

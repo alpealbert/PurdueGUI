@@ -1,11 +1,17 @@
-package com.codebind;
-
 public class UpdateDataThread implements Runnable {
 
     private int var;
 
     public UpdateDataThread(int var) {
         this.var = var;
+    }
+
+    public int toFahrenheit(int C){
+        return (int)(C*1.8+32);
+    }
+
+    public int toCelcius(int F){
+        return (int)((F-32)/1.8);
     }
 
     public void run() {
@@ -22,8 +28,8 @@ public class UpdateDataThread implements Runnable {
                     Dashboard.setOilTempScavenge(i/100);
                     Dashboard.setOilTempOutlet(i/100);
                 }
-                Dashboard.setN1_EningeRPM(i/100);
-                Dashboard.setN2_EningeRPM(i/60);
+                Dashboard.setN1_EningeRPM(i);
+                Dashboard.setN2_EningeRPM(i);
                 Dashboard.setOilPressure(45);
                 Thread.sleep(40);
             } catch (InterruptedException e) {
