@@ -26,22 +26,22 @@ public class Dashboard extends JFrame implements IDashboard{
     private float oilPressureMaxVal = 100;
     private float FuelFlowMaxVal = 1000;
 
-    private int N1_EngineRPMVal = 0;
-    private int N2_EngineRPMVal = 0;
-    private int oilPressureVal = 0;
-    private float Scav_OilTemperatureVal = 0;
-    private float Outlet_OilTemperatureVal = 0;
+    private static int N1_EngineRPMVal = 0;
+    private static int N2_EngineRPMVal = 0;
+    private static int oilPressureVal = 0;
+    private static float Scav_OilTemperatureVal = 0;
+    private static float Outlet_OilTemperatureVal = 0;
 
-    private float Ambient_TemperatureVal = 0;
-    private float Ambient_pressureVal = 0;
-    private float T1_TemperatureVal = 0;
-    private float T1_PressureVal = 0;
-    private float T45_TemperatureVal = 0;
-    private float T45_PressureVal = 0;
-    private float T75_TemperatureVal = 0;
-    private float T75_PressureVal = 0;
-    private  float T17_TemperatureVal = 0;
-    private  float T17_PressureVal = 0;
+    private static float Ambient_TemperatureVal = 0;
+    private static float Ambient_pressureVal = 0;
+    private static float T1_TemperatureVal = 0;
+    private static float T1_PressureVal = 0;
+    private static float T45_TemperatureVal = 0;
+    private static float T45_PressureVal = 0;
+    private static float T75_TemperatureVal = 0;
+    private static float T75_PressureVal = 0;
+    private static float T17_TemperatureVal = 0;
+    private static float T17_PressureVal = 0;
 
     private  int FuelFlowVal = 0;
     private  Radial N1_EngineRPM_gauge = null;
@@ -62,14 +62,14 @@ public class Dashboard extends JFrame implements IDashboard{
     private  Linear T17_Pressure_linear = null;
 
 
-    private  JLabel valueLabel = null;
-    private  String outputPath = null;
+    private static JLabel valueLabel = null;
+    private static String outputPath = null;
 
      JButton button3;
 
 
 
-    public Dashboard(IDashboard Dashboard) {
+    public Dashboard() {
 
         JFrame frame = new JFrame("JFrame Example");
         JPanel panel = new JPanel();
@@ -533,7 +533,7 @@ public class Dashboard extends JFrame implements IDashboard{
             public void actionPerformed(ActionEvent e) {
                 if(button3.getText().equals("Begin Log")){
                     button3.setText("Stop Log");
-                    Logger LoggerThread = new Logger(false,Dashboard);
+                    Logger LoggerThread = new Logger(false);
                     Thread t2 = new Thread(LoggerThread);
                     t2.start();
                 }else{
@@ -558,63 +558,63 @@ public class Dashboard extends JFrame implements IDashboard{
 
     }
 
-    public int getN1_EngineRPMVal() {
+    public static int getN1_EngineRPMVal() {
         return N1_EngineRPMVal;
     }
 
-    public int getN2_EngineRPMVal() {
+    public static int getN2_EngineRPMVal() {
         return N2_EngineRPMVal;
     }
 
-    public int getOilPressureVal() {
+    public static int getOilPressureVal() {
         return oilPressureVal;
     }
 
-    public float getScav_OilTemperatureVal() {
+    public static float getScav_OilTemperatureVal() {
         return Scav_OilTemperatureVal;
     }
 
-    public float getOutlet_OilTemperatureVal() {
+    public static float getOutlet_OilTemperatureVal() {
         return Outlet_OilTemperatureVal;
     }
 
-    public float getAmbient_TemperatureVal() {
+    public static float getAmbient_TemperatureVal() {
         return Ambient_TemperatureVal;
     }
 
-    public float getAmbient_pressureVal() {
+    public static float getAmbient_pressureVal() {
         return Ambient_pressureVal;
     }
 
-    public float getT1_TemperatureVal() {
+    public static float getT1_TemperatureVal() {
         return T1_TemperatureVal;
     }
 
-    public float getT1_PressureVal() {
+    public static float getT1_PressureVal() {
         return T1_PressureVal;
     }
 
-    public float getT45_TemperatureVal() {
+    public static float getT45_TemperatureVal() {
         return T45_TemperatureVal;
     }
 
-    public float getT45_PressureVal() {
+    public static float getT45_PressureVal() {
         return T45_PressureVal;
     }
 
-    public float getT75_TemperatureVal() {
+    public static float getT75_TemperatureVal() {
         return T75_TemperatureVal;
     }
 
-    public float getT75_PressureVal() {
+    public static float getT75_PressureVal() {
         return T75_PressureVal;
     }
 
-    public float getT17_TemperatureVal() {
+    public static float getT17_TemperatureVal() {
         return T17_TemperatureVal;
     }
 
-    public float getT17_PressureVal() {
+    public static float getT17_PressureVal() {
         return T17_PressureVal;
     }
 
@@ -761,11 +761,11 @@ public class Dashboard extends JFrame implements IDashboard{
         FuelFlowVal = fuelFlowValue;
     }
 
-    public String getValueType(){
+    public static String getValueType(){
         return valueLabel.getText();
     }
 
-    public String getOutputPath(){return outputPath;}
+    public static String getOutputPath(){return outputPath;}
 
     public int toFahrenheit(int C){
         return (int)(C*1.8+32);

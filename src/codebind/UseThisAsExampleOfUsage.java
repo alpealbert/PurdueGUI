@@ -1,10 +1,10 @@
 public class UseThisAsExampleOfUsage {
 
-    static IDashboard Dashboard;
+    static Dashboard Dashboard;
     private int var;
 
     public static void main(String[] args) {
-        Dashboard=new Dashboard(Dashboard);
+        Dashboard=new Dashboard();
 
         Dashboard.setOilPressure(45);
         while (true) {

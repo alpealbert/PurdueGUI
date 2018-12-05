@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
+
 public class Logger implements Runnable{
 
     //Change LoggerInterval to change log-interval. Time in ms between reads.
@@ -12,11 +13,10 @@ public class Logger implements Runnable{
     public static PrintWriter printWriter = null;
     public  FileWriter fileWriter = null;
     public static boolean exit = false;
-    IDashboard Dashboard;
 
-    public Logger(Boolean exitValue,IDashboard dashboard){
+    public Logger(Boolean exitValue){
         exit = exitValue;
-        Dashboard=dashboard;
+
     }
     @Override
     public void run() {

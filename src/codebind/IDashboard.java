@@ -1,36 +1,5 @@
 public interface IDashboard {
 
-    public  int getN1_EngineRPMVal();
-
-    public  int getN2_EngineRPMVal();
-
-    public  int getOilPressureVal();
-
-    public  float getScav_OilTemperatureVal();
-
-    public  float getOutlet_OilTemperatureVal();
-
-    public  float getAmbient_TemperatureVal();
-
-    public  float getAmbient_pressureVal();
-
-    public  float getT1_TemperatureVal();
-
-    public  float getT1_PressureVal();
-
-    public  float getT45_TemperatureVal();
-
-    public  float getT45_PressureVal();
-
-    public  float getT75_TemperatureVal();
-
-    public  float getT75_PressureVal();
-
-    public  float getT17_TemperatureVal();
-
-    public  float getT17_PressureVal();
-
-    public int getN1_EningeRPM();
 
     public  void setN1_EngineRPMVal(int n1_EngineRPMVal);
 
@@ -64,9 +33,6 @@ public interface IDashboard {
 
     public  void setFuelFlow(int fuelFlowValue);
 
-    String getValueType();
-
-    String getOutputPath();
 
     int toFahrenheit(int C);
 
