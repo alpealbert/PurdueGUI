@@ -1,3 +1,5 @@
+package codebind;
+
 public interface IDashboard {
 
 

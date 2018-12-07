@@ -1,3 +1,6 @@
+package codebind;
+
+import codebind.IDashboard;
 import eu.hansolo.steelseries.gauges.Linear;
 import eu.hansolo.steelseries.gauges.Radial;
 import eu.hansolo.steelseries.tools.*;
@@ -9,10 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class Dashboard extends JFrame implements IDashboard{
+public class Dashboard extends JFrame implements IDashboard {
 
-    private Linear oilTempScavenge = null;
-
+    //Change these values to change ranges of dials
     private float Ambient_TemperatureMaxVal = 300;
     private float Ambient_pressureMaxVal = 300;
     private float T1_TemperatureMaxVal = 300;
@@ -60,6 +62,7 @@ public class Dashboard extends JFrame implements IDashboard{
     private  Linear T75_Pressure_linear = null;
     private  Linear T17_Temperature_linear = null;
     private  Linear T17_Pressure_linear = null;
+    private  Linear oilTempScavenge = null;
 
 
     private static JLabel valueLabel = null;
@@ -71,7 +74,8 @@ public class Dashboard extends JFrame implements IDashboard{
 
     public Dashboard() {
 
-        JFrame frame = new JFrame("JFrame Example");
+        //Setup layout
+        JFrame frame = new JFrame("DTU / Purdue - Graphical Interface");
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(2,3));
         panel.setBackground(Color.black);
@@ -86,6 +90,7 @@ public class Dashboard extends JFrame implements IDashboard{
         subPanel2.setBackground(Color.black);
         subPanel2.setBorder(BorderFactory.createEmptyBorder(2,20,2,20));
 
+        //Setup gauges
         oilTempScavenge = new Linear();
         oilTempScavenge.setTitle("Oil Temp Scavenge");
         oilTempScavenge.setUnitString("\u00b0F");
@@ -93,7 +98,7 @@ public class Dashboard extends JFrame implements IDashboard{
         oilTempScavenge.setMinValue(32);
         oilTempScavenge.setThreshold(290);
 
-        //Set track & sections
+        //Set track & sections (green, yellow, red parts of a dial)
         final Section[] sectionOilTempScavenge = {
                 new Section(0, 270, java.awt.Color.GREEN),
                 new Section(270, 290, java.awt.Color.YELLOW),
@@ -124,7 +129,7 @@ public class Dashboard extends JFrame implements IDashboard{
         oilTempOutlet.setBackgroundColor(BackgroundColor.LIGHT_GRAY);
         oilTempOutlet.setFrameVisible(false);
 
-        //Copy and paste
+        //Ambient Temperature
         AmbientTemperature_linear = new Linear();
         AmbientTemperature_linear.setUnitString("\u00b0F");
         AmbientTemperature_linear.setTitle("Ambient Temperature");
@@ -227,7 +232,7 @@ public class Dashboard extends JFrame implements IDashboard{
         T17_Pressure_linear.setLedVisible(false);
 
 
-
+        //N1 RPM
         N1_EngineRPM_gauge = new Radial();
         N1_EngineRPM_gauge.setTitle("N1");
         N1_EngineRPM_gauge.setUnitString("RPM x 100");
@@ -255,7 +260,7 @@ public class Dashboard extends JFrame implements IDashboard{
 
 
 
-
+        //N1 RPM
         N2_EngineRPM_gauge = new Radial();
         N2_EngineRPM_gauge.setTitle("N2");
         N2_EngineRPM_gauge.setUnitString("RPM x 100");
@@ -283,6 +288,7 @@ public class Dashboard extends JFrame implements IDashboard{
 
 
 
+        //Oil pressure
         oilPressure_gauge = new Radial();
         oilPressure_gauge.setTitle("Oil Pressure");
         oilPressure_gauge.setUnitString("PSI");
@@ -311,7 +317,7 @@ public class Dashboard extends JFrame implements IDashboard{
         oilPressure_gauge.setSectionsVisible(true);
 
 
-
+        //Fuel Flow
         FuelFlow_Radial = new Radial();
         FuelFlow_Radial.setTitle("Fuel Flow");
         FuelFlow_Radial.setUnitString("gal/hr");
@@ -328,6 +334,7 @@ public class Dashboard extends JFrame implements IDashboard{
         FuelFlow_Radial.setFrameVisible(true);
 
 
+        //Add to panels
         subPanel1.add(oilTempOutlet);
         subPanel1.add(oilTempScavenge);
         subPanel1.add(AmbientTemperature_linear);
@@ -352,13 +359,13 @@ public class Dashboard extends JFrame implements IDashboard{
         JPanel buttonsPanel = new JPanel();
         valueLabel = new JLabel("Current Values: Imperial");
 
-        /*final JTextField valueField = new JTextField(7);
-        valueField.setText("30")*/;
+        //Create unit-switch button and add functionality
         JButton button = new JButton("Switch to Metric");
         button.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    //If metric to imperial adjust ranges and units
                     if(valueLabel.getText().equals("Current Values: Metric")){
                         valueLabel.setText("Current Values: Imperial");
                         button.setText("Switch to Metric");
@@ -429,7 +436,7 @@ public class Dashboard extends JFrame implements IDashboard{
                         FuelFlow_Radial.setMaxValue(FuelFlowMaxVal);
                         FuelFlow_Radial.setUnitString("Gallon/Hour");
 
-                    }else{
+                    }else{ //If imperial to metric adjust ranges and units
                         valueLabel.setText("Current Values: Metric");
                         button.setText("Switch to Imperial");
 
@@ -499,17 +506,18 @@ public class Dashboard extends JFrame implements IDashboard{
                         FuelFlow_Radial.setUnitString("Litres/Hour");
                     }
                 } catch(NumberFormatException ex) {
-                    //TODO - handle invalid input
                     System.err.println("invalid input");
                 }
             }
         });
 
 
+        //Create button and add functionality
         JButton button2 = new JButton("Choose Log Output Destination");
         button2.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Open file location selecter
                 JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
                 jfc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
                 int returnValue = jfc.showOpenDialog(null);
@@ -521,16 +529,19 @@ public class Dashboard extends JFrame implements IDashboard{
                     System.out.println(selectedFile.getAbsolutePath());
                 }
 
+                //If path selected successfully activate "logging"-button
                 if(outputPath != null){
                     button3.setEnabled(true);
                 }
             }
         });
 
+        //Create button and add functionality
         button3 = new JButton("Begin Log");
         button3.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Start thread and begin logging
                 if(button3.getText().equals("Begin Log")){
                     button3.setText("Stop Log");
                     Logger LoggerThread = new Logger(false);
@@ -544,6 +555,7 @@ public class Dashboard extends JFrame implements IDashboard{
         });
 
 
+        //Add buttons to layout
         buttonsPanel.add(valueLabel);
         buttonsPanel.add(button);
         buttonsPanel.add(button2);

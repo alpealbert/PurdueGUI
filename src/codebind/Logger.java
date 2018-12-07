@@ -1,3 +1,5 @@
+package codebind;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,6 +22,7 @@ public class Logger implements Runnable{
     }
     @Override
     public void run() {
+        //get output path and open Filewriter and Printwriter
         try {
             fileWriter = new FileWriter(Dashboard.getOutputPath()+"\\log.txt", true);
             System.out.println(Dashboard.getOutputPath()+"\\log.txt");
@@ -29,9 +32,12 @@ public class Logger implements Runnable{
         }
         printWriter = new PrintWriter(fileWriter);
 
+        //While logging
         while(!exit){
             System.out.println("Printing!");
+            //Get time and date
             String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+            //If settings = metric, print metric units
             if(Dashboard.getValueType().equals("Current Values: Metric")) {
                 printWriter.println("OilTmpSca(C): " + toCelcius((int) Dashboard.getScav_OilTemperatureVal()) +
                         ", OilTmpOut(C): " + toCelcius((int) Dashboard.getOutlet_OilTemperatureVal()) +
@@ -53,7 +59,7 @@ public class Logger implements Runnable{
                         " " + date.substring(9, 11) +
                         ":" + date.substring(11, 13) +
                         ":" + date.substring(13, 15));
-            }else {
+            }else { //If settings = imperial, print imperial units
                 printWriter.println("OilTmpSca(F): " + Dashboard.getScav_OilTemperatureVal() +
                         ", OilTmpOut(F): " + Dashboard.getOutlet_OilTemperatureVal() +
                         ", OilPres(PSI): " + Dashboard.getOilPressureVal() +

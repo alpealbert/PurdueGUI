@@ -1,3 +1,7 @@
+package codebind;
+
+import codebind.Dashboard;
+
 public class UseThisAsExampleOfUsage {
 
     static Dashboard Dashboard;
@@ -28,6 +32,7 @@ public class UseThisAsExampleOfUsage {
                 Dashboard.setT17Temperature(i / 100);
                 Dashboard.setT17Pressure(i / 100);
 
+                //Delete this artificial read-delay.
                 try {
                     Thread.sleep(40);
                 } catch (InterruptedException e) {
@@ -38,11 +43,7 @@ public class UseThisAsExampleOfUsage {
         }
     }
 
-
-    public UseThisAsExampleOfUsage(int var) {
-        this.var = var;
-    }
-
+    //Unit conversion functions
     public int toFahrenheit(int C) {
         return (int) (C * 1.8 + 32);
     }
